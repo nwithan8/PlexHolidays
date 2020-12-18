@@ -57,7 +57,7 @@ class Plex:
     def create_new_playlist(self, playlist_name: str, items: List[media.Media]):
         self.server.createPlaylist(title=playlist_name, items=items)
 
-    def add_to_playlist(self, playlist_name: str, items: List[media.Media], create_if_not_found: bool = False):
+    def add_to_playlist(self, playlist_name: str, items: List[media.Media], create_if_not_found: bool = False) -> bool:
         playlist = self.get_playlist(playlist_name=playlist_name)
         if playlist:
             playlist.addItems(items=items)
@@ -86,7 +86,7 @@ class Plex:
 
 plex = Plex(url=args.url, token=args.plex_token)
 
-def contains_keywords(item: Union[video.Video]):
+def contains_keywords(item: Union[video.Video]) -> bool:
     all_keywords_present = True
     for keyword in args.keywords:
         if args.all and not all_keywords_present:
