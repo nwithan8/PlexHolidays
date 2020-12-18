@@ -1,5 +1,1 @@
-tqdm
-retry
-tvdb_api
-PlexAPI
-IMDbPY
+plexAPI

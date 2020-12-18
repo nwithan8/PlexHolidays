@@ -1,10 +1,17 @@
-Automatically find holiday movies/episodes on a Plex server and add them to a playlist.
-Searches the Plex title, Plex plot, and IMDb keywords for each movie/episode for a keyword.
+Find movies and episodes on a Plex Media Server that match specific keywords, and add them to a playlist.
+Searches the title and plot.
 
-Required modules can be installed from an elevated command prompt on Windows machines:
+*An earlier version of this script used external metadata agents (i.e. TVDb). Those have been removed.* 
 
-    py -m pip install -r requirements.txt
+## Install
+   1. ``git clone https://github.com/nwithan8/PlexHolidays.git``
+   2. Enter "PlexHolidays" folder
+   3. Install dependencies with ``python -m pip install -r requirements.txt``
+    
+## Usage
 
-Or on Linux machines with:
-
-    # python -m pip install -r requirements.txt
+   Run with ``python run.py -u [SERVER_URL] -t [PLEX_TOKEN] -k [KEYWORD 1] [KEYWORD 2] ... -p [PLAYLIST_NAME] -s [SECTION_1_NAME] [SECTION_2_NAME] ...``
+   
+   Include ``--all`` if all the keywords must be present to be added to the playlist.
+   
+   See ``python run.py --help`` for more details.
