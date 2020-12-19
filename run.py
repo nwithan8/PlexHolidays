@@ -2,6 +2,7 @@ import argparse
 from typing import List, Union
 
 from plexapi import server, media, video, library, playlist
+from progress.bar import Bar
 
 
 parser = argparse.ArgumentParser(description="Make or add to a Plex playlist based off keywords")
@@ -78,10 +79,8 @@ class Plex:
                 return section
         return None
 
-    def get_all_section_items(self, section: library.LibrarySection) -> List[Union[video.Movie, video.Episode]]:
-        if section.type == 'movie':
-            return section.all()
-        return [show.episodes() for show in section.all()]
+    def get_all_section_items(self, section: library.LibrarySection) -> List[Union[video.Movie, video.Show]]:
+        return section.all()
 
 
 plex = Plex(url=args.url, token=args.plex_token)
@@ -118,9 +117,21 @@ def find_matching_items():
         if not section_items:
             print(f'Could not get any items from section "{section_name}"')
             continue
-        for item in section_items:
-            if contains_keywords(item=item):
-                local_matching_items.append(item)
+        if section.type == 'movie':
+            bar = Bar(f'Analyzing movies...', max=len(section_items))
+            for movie in section_items:
+                if contains_keywords(item=movie):
+                    local_matching_items.append(movie)
+                bar.next()
+            bar.finish()
+        elif section.type == 'show':
+            bar = Bar(f'Analyzing shows...', max=len(section_items))
+            for show in section_items:
+                for episode in show.episodes():
+                    if contains_keywords(item=episode):
+                        local_matching_items.append(episode)
+                bar.next()
+            bar.finish()
         if not local_matching_items:
             print(f'Did not find any matching items in "{section_name}"')
         else:
